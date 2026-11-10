@@ -1,0 +1,10 @@
+{
+  "coordinator_address": "192.0.2.10",
+  "worker_address": "192.0.2.20",
+  "interface": "Ethernet",
+  "model_bytes": 48410989184,
+  "devices": [
+    {"role": "coordinator", "name": "NVIDIA GeForce RTX 5090", "model_budget_mib": 26557, "reserve_mib": 2048},
+    {"role": "worker", "name": "NVIDIA GeForce RTX 4090", "model_budget_mib": 19440, "reserve_mib": 2048}
+  ]
+}

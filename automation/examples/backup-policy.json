@@ -1,0 +1,5 @@
+{
+  "max_age_hours": 30,
+  "guests": [{"kind": "vm", "id": 201}, {"kind": "ct", "id": 301}],
+  "excluded": [{"kind": "vm", "id": 299, "reason": "Disposable network exercise; rebuild from source"}]
+}

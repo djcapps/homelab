@@ -1,0 +1,86 @@
+# Proposed test deployment. Not applied to the lab.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kuma-example
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kuma-data
+  namespace: kuma-example
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kuma
+  namespace: kuma-example
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kuma
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kuma
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: kuma
+          image: louislam/uptime-kuma@sha256:3d632903e6af34139a37f18055c4f1bfd9b7205ae1138f1e5e8940ddc1d176f9
+          ports:
+            - name: http
+              containerPort: 3001
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: kuma-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kuma
+  namespace: kuma-example
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: kuma
+  ports:
+    - name: http
+      port: 3001
+      targetPort: http

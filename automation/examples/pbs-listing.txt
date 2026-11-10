@@ -1,0 +1,4 @@
+Volid Format Type Size VMID
+example:backup/vm/201/2026-01-01T04:00:00Z pbs-vm backup 5000000 201
+example:backup/vm/201/2026-01-02T04:00:00Z pbs-vm backup 5100000 201
+example:backup/ct/301/2026-01-02T04:05:00Z pbs-ct backup 2000000 301
