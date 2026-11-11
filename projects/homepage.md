@@ -2,9 +2,9 @@
 
 [Homepage](https://github.com/gethomepage/homepage) is the first page I open to check the lab. It runs on the Fedora NAS host and brings together service links, host telemetry, backup status, and controls for workloads I start on demand. The dark theme and navigation are customized; the service integrations still come from Homepage and the existing collectors.
 
-![Homepage overview with host readings, backup status, storage, and network services](../images/homepage-overview.jpg)
+[![Scrolling through Homepage's host, service, compute, and monitoring panels](../images/homepage-scroll.gif)](../images/homepage-scroll.mp4)
 
-*November 10, 2026. Host labels and addresses are redacted. Missing readings, the failed-backup-task count, and the switch controller's reported state are left as captured.*
+*An eight-second scroll through the dashboard. [Open or download the MP4](../images/homepage-scroll.mp4), or see the [overview screenshot](../images/homepage-overview.jpg) and [first frame](../images/homepage-scroll.jpg). Private labels and camera events are covered; readings and service states are left as captured.*
 
 ## Making the summary useful
 
@@ -16,7 +16,11 @@ Backup task failures need inspection even when recent snapshots exist. The task 
 
 One actual integration failure was less dramatic: the Grafana widget was using the older API configuration and receiving a 404. Updating its configured API version restored the response. A reachable web interface had not established that the dashboard integration was working.
 
-Host tiles also launch native SSH sessions from the workstation. The browser is the starting point; authentication and the shell remain in the SSH client. Raw terminal recordings are kept private because they include login and network details.
+Host tiles also launch native SSH sessions from the workstation. The browser is the starting point; authentication and the shell remain in the SSH client.
+
+[![Opening native SSH sessions from Homepage host tiles](../images/homepage-ssh.gif)](../images/homepage-ssh.mp4)
+
+*Selecting host tiles opens separate terminal sessions. [Open or download the recording](../images/homepage-ssh.mp4), or view the [first frame](../images/homepage-ssh.jpg). Usernames, host labels, addresses, and login history are covered in this public copy.*
 
 ## What runs behind the tiles
 

@@ -2,9 +2,9 @@
 
 An orrery is a mechanical model of a planetary system. Mine is a slightly unreasonable way to look at a home network. Hosts become planets, guests and services become moons, and the gateway sits at the center. Selecting a body brings up the monitoring data behind it.
 
-![Network Orrery with the live host inspector open](../images/network-orrery.jpg)
+[![Orbiting and zooming through the rack edition of Network Orrery](../images/network-orrery-tour.gif)](../images/network-orrery-tour.mp4)
 
-*Rack edition, captured November 10, 2026. Private names and addresses are covered. The scene and its readings are from the running application.*
+*An eight-second excerpt from the rack edition, cropped with identifying labels covered. [Open or download the MP4](../images/network-orrery-tour.mp4), view the [first frame](../images/network-orrery-tour.jpg), or see the [host inspector screenshot](../images/network-orrery.jpg).*
 
 ## From telemetry to the rack display
 
@@ -24,7 +24,7 @@ flowchart TB
 
 The P330 Tiny hosts the Debian VM, renderer, and encoder. The Pi decodes the stream and returns touch input. This puts graphics work on the Arc while keeping the small panel as the display endpoint. The Arc used here is a separate device from the one available to Jellyfin on another Proxmox host.
 
-The VM's application, display, renderer, and Sunshine services were all running during the November 10 read-only check. Its snapshot reported live source data. The Pi display path is documented in the existing deployment and validation notes; client-side service status was not reverified during this review.
+The VM runs separate services for the application, display, renderer, and Sunshine stream. The collector supplies live snapshots. The Pi display path has its own deployment and validation notes; a healthy VM alone does not prove that the client is receiving video.
 
 ## Losing the feed should be obvious
 

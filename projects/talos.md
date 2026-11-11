@@ -1,6 +1,6 @@
 # Talos on Proxmox
 
-Three virtual machines make up the cluster. Each has four vCPUs, 4 GiB RAM, and a 64 GiB disk. All three are control-plane nodes and also accept application workloads. The November 10, 2026 check found all nodes Ready on Talos 1.13.8 and Kubernetes 1.36.2, with three healthy etcd members.
+Three virtual machines make up the cluster. Each has four vCPUs, 4 GiB RAM, and a 64 GiB disk. All three are control-plane nodes and also accept application workloads. They run Talos 1.13.8 and Kubernetes 1.36.2, with one etcd member per node.
 
 Talos keeps the operating-system interface small: configuration and inspection go through its API rather than a collection of changes made over SSH. Proxmox gives me a separate place to inspect the guest's disk, memory, and host placement. Keeping those two layers distinct helps when a Kubernetes symptom starts below Kubernetes.
 

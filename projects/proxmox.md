@@ -1,6 +1,6 @@
 # Proxmox, storage, and recovery
 
-The three-node Proxmox cluster runs on two ThinkCentre M90q systems and a P330 Tiny. On November 10, 2026 all three were online and quorate on PVE 9.2.26. Fourteen guests were configured, ten running and four stopped. The stopped guests include desktop and network experiments; they are not failed production services.
+The three-node Proxmox cluster runs PVE 9.2.26 on two ThinkCentre M90q systems and a P330 Tiny. It has fourteen configured guests, with ten running and four stopped. The stopped guests include desktop and network experiments.
 
 Small machines make this practical to keep at home, but memory, PCIe slots, and disks are real constraints. Each host has a single-disk ZFS root pool. I use replication and backups with those limits in mind rather than treating a three-node cluster as a substitute for redundant storage.
 
@@ -8,7 +8,7 @@ Small machines make this practical to keep at home, but memory, PCIe slots, and 
   <img src="../images/mini-rack.jpg" width="360" alt="Four Lenovo Tiny computers in my mini rack, with a status display, disks, and power distribution">
 </p>
 
-*November 10, 2026. Original photograph, cropped with private screen headings, address labels, and disk identifiers redacted.*
+*Original photograph, cropped with private screen headings, address labels, and disk identifiers redacted.*
 
 ![Proxmox guest inventory with running containers and stopped experiments](../images/proxmox-guests.png)
 
@@ -18,7 +18,7 @@ Containers handle services such as monitoring, DNS, Immich, and Jellyfin. VMs pr
 
 ## What HA covers
 
-Proxmox HA manages the three Talos VMs, the monitoring container, and the DNS container. Ten asynchronous ZFS replication jobs provide copies on the other hosts. Their configured interval is one minute. The observed jobs had no recorded failures, with some in progress at the time of inspection.
+Proxmox HA manages the three Talos VMs, the monitoring container, and the DNS container. Ten asynchronous ZFS replication jobs provide copies on the other hosts. Their configured interval is one minute.
 
 The interval is not a guaranteed one-minute recovery point. A backlog or network failure can make the usable copy older, and restarting a VM still takes time. All hosts share home power and networking. I have not measured an end-to-end recovery time for this portfolio.
 
@@ -30,7 +30,7 @@ Proxmox Backup Server runs in a Podman container on the Fedora NAS host. The gue
 
 Immich runs in an unprivileged Debian container. Its database and application state live on local SSD storage; originals are on an NFS-backed library from the NAS. That library is an excluded bind mount in the guest backup configuration. Restoring only the guest would not restore the photographs.
 
-The NAS has separate data and backup disks, but both are attached to the same host. Its file-copy jobs and Immich backup job returned successful exit status during this review. A mirror that propagates deletions does not provide historical retention. Snapshot listings and successful timers also do not prove that an application can be restored.
+The NAS has separate data and backup disks, but both are attached to the same host. File-copy jobs and a separate Immich backup job maintain the copies. A mirror that propagates deletions does not provide historical retention. Snapshot listings and successful timers also do not prove that an application can be restored.
 
 The [backup audit](../automation/README.md#backup-freshness) checks whether every expected guest has a recent snapshot. It deliberately reports missing or stale coverage separately from restore verification.
 

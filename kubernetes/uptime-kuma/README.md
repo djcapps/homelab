@@ -1,6 +1,6 @@
 # Uptime Kuma on local storage
 
-The running deployment has one replica, a `Recreate` update strategy, and a 2 GiB local-path PVC. It uses the `louislam/uptime-kuma:1` image tag and a NodePort Service. The November 10, 2026 check found its current pod Ready, but no Kubernetes startup/readiness/liveness probes or resource requests and limits were configured.
+The running deployment has one replica, a `Recreate` update strategy, and a 2 GiB local-path PVC. It uses the `louislam/uptime-kuma:1` image tag and a NodePort Service. Kubernetes startup, readiness, and liveness probes and resource requests and limits are not configured.
 
 `Recreate` makes the single-writer arrangement explicit during updates. It also means a deployment update interrupts the service. The volume is bound to one Talos VM, so another Ready node does not automatically provide another copy of Kuma's data.
 
@@ -8,9 +8,9 @@ The running deployment has one replica, a `Recreate` update strategy, and a 2 Gi
 
 ![Uptime Kuma DNS monitor with response history and recorded timeouts](../../images/kuma-dns.png)
 
-*DNS check captured November 10, 2026. The history includes real query timeouts and later recoveries. The percentages belong to this monitor and its displayed windows; they are not an availability claim for the lab.*
+*DNS query timeouts and later recoveries. The percentages belong to this monitor and its displayed windows; they are not an availability claim for the lab.*
 
-The DNS monitor asks the local AdGuard Home server for the A records of `google.com` every 60 seconds. Google is the test hostname shown in the screenshot; the configured resolver is AdGuard, not Google Public DNS. The live monitor settings were checked on November 10, 2026.
+The DNS monitor asks the local AdGuard Home server for the A records of `google.com` every 60 seconds. Google is the test hostname shown in the screenshot; the configured resolver is AdGuard, not Google Public DNS.
 
 This checks whether AdGuard can answer a public-name lookup, using its cache or upstream resolution. It does not test ad blocking or prove that every client uses AdGuard. It also checks a different path from a host ping, which can succeed while resolution fails. The response-time graph gives me a place to start investigating, but a spike alone does not identify whether the delay was local, upstream, or in the monitoring path.
 

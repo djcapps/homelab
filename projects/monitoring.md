@@ -6,7 +6,7 @@ The useful distinction is between a service failure and a monitoring failure. A 
 
 ![Grafana workstation dashboard with CPU, GPU, temperature, memory, and power history](../images/grafana-workstation.png)
 
-*The RTX 4090 workstation dashboard, November 10, 2026. This is an ordinary captured time window, not a controlled workload or a performance comparison.*
+*The RTX 4090 workstation dashboard during ordinary use.*
 
 ## Following a reading
 
@@ -28,11 +28,11 @@ Each output includes the producer's observation time. The file is written beside
 
 The collector runs every minute. A persistent failure is shown in the feed rather than sending an email on every failed invocation. That avoids a notification storm while preserving the failure signal. A consumer still needs to check the timestamp: yesterday's successful feed is not today's status.
 
-## What the current snapshot establishes
+## Availability and alert expectations
 
-The November 10, 2026 check found Grafana healthy and Prometheus scraping the rack and the two main workstations. Some client targets were unavailable. Several machines in this lab are used on demand, so target intent needs to be part of an alert policy. A failed scrape alone cannot distinguish a sleeping laptop from an unexpected outage.
+Prometheus scrapes the rack and the two main workstations, and Grafana displays their metrics. Several client machines are used on demand, so target intent needs to be part of an alert policy. A failed scrape alone cannot distinguish a sleeping laptop from an unexpected outage.
 
-Kuma's timestamped feed reported seven of seven checks up at that moment. This is a point-in-time observation, not an uptime percentage. Prometheus had no firing alerts in the sampled response, which says little about whether every useful failure has an alert rule.
+Kuma's timestamped feed summarizes seven service checks. A green summary describes their latest results, not a historical uptime percentage. Likewise, an empty Prometheus alert list says little about whether every useful failure has an alert rule.
 
 ## Improvements to test
 

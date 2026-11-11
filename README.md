@@ -4,7 +4,7 @@ A small rack, two GPU workstations, and a fairly persistent list of things to fi
 
 ![My desk, mini rack, and two GPU workstations](images/desk-area.jpg)
 
-*The lab on November 10, 2026. This photo has light AI-assisted retouching and privacy redactions; [photo notes](images/README.md) describe the edits. The [rack close-up](projects/proxmox.md) uses an original photograph.*
+*This photo has light AI-assisted retouching and privacy redactions; [photo notes](images/README.md) describe the edits. The [rack close-up](projects/proxmox.md) uses an original photograph.*
 
 ## Projects
 
@@ -16,13 +16,13 @@ A small rack, two GPU workstations, and a fairly persistent list of things to fi
 
 **[Proxmox and recovery](projects/proxmox.md).** Five guests use Proxmox HA with asynchronous ZFS replication. Backups are a separate concern. The recovery checklist follows a guest through storage and application checks, supported by an offline [backup freshness checker](automation/README.md#backup-freshness).
 
-**[Local GPU inference](projects/gpu-inference.md).** Native Windows llama.cpp uses CUDA locally and an RPC worker on the other workstation. Saved tests show inference with an 80B model across both GPUs. The services start manually; the current review found stale network assumptions that need fixing before the next run.
+**[Local GPU inference](projects/gpu-inference.md).** Native Windows llama.cpp uses CUDA locally and an RPC worker on the other workstation. Saved tests show inference with an 80B model across both GPUs. The services start manually, with explicit controls for loading models and releasing GPU memory.
 
 **[Homepage and services](projects/homepage.md).** The dashboard is my front door to the lab, with host readings, backup status, SSH launchers, and service controls. [Monitoring notes](projects/monitoring.md) follow the data through Prometheus, Grafana, and Kuma, including a collector bug that made an empty response look healthy.
 
 ## The lab
 
-Three Lenovo Tiny systems run Proxmox. A fourth runs Fedora for file storage, backups, and administration. The GPU workstations handle inference separately from the services in the rack. This inventory was checked on November 10, 2026.
+Three Lenovo Tiny systems run Proxmox. A fourth runs Fedora for file storage, backups, and administration. The GPU workstations handle inference separately from the services in the rack.
 
 | System | CPU | RAM | Role |
 | --- | --- | --- | --- |

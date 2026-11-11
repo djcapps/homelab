@@ -4,7 +4,7 @@ The two workstations share a desk, monitors, and a recurring question: what is u
 
 [![Widget Dock collapsing and restoring the desktop controls](../images/widget-dock.gif)](../images/widget-dock.mp4)
 
-*November 10, 2026. [Open or download the short recording](../images/widget-dock.mp4), or view the [still frame](../images/widget-dock.jpg). Host labels are redacted; window movement and displayed readings are unchanged.*
+*[Open or download the short recording](../images/widget-dock.mp4), or view the [still frame](../images/widget-dock.jpg). Host labels are redacted; window movement and displayed readings are unchanged.*
 
 ## SysWidget
 
