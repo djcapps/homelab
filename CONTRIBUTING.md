@@ -1,6 +1,6 @@
 # Checking changes
 
-This repository documents a personal lab. Live state and examples have different purposes: project pages describe dated observations, while the Kuma manifest and offline fixtures are explicitly labeled examples. No check in this repository deploys anything.
+This repository documents a personal lab. Project pages describe the installed systems; the Kuma manifest and offline fixtures are explicitly labeled examples. No check in this repository deploys anything.
 
 Use Python 3.12 or newer for development tooling. The two standalone audit tools support Python 3.11 or newer.
 
@@ -14,7 +14,7 @@ python -m ruff format --check .
 python tools/check_repository.py
 ```
 
-The tests cover missing and stale backups, unrecognized input, future timestamps, inconsistent guest identity, stale network assumptions, GPU role mismatches, and insufficient or invalid memory readings. The repository check validates relative links, YAML relationships, prose rules, common credential patterns, private IPv4 addresses, and image metadata. It is a guardrail, not a complete secret detector.
+The tests cover missing and stale backups, unrecognized input, future timestamps, inconsistent guest identity, stale network assumptions, GPU role mismatches, and insufficient or invalid memory readings. The repository check validates relative links, YAML relationships, prose rules, common credential patterns, and image metadata. It is a guardrail, not a complete secret detector.
 
 Validate the Kubernetes objects with [kubeconform](https://github.com/yannh/kubeconform):
 
@@ -26,7 +26,7 @@ Schema validation checks API shape. It cannot prove that the image starts, the s
 
 Before publishing changes, run [Gitleaks](https://github.com/gitleaks/gitleaks) against both the files and Git history, then inspect the staged diff and each image. For recordings, review the complete selected segment, including moving labels and temporary tooltips. Pattern checks cannot recognize a family photograph, private document, or identifying screen content. OCR can help locate text but does not replace visual review.
 
-Re-export derivatives without EXIF, GPS, XMP, embedded thumbnails, comments, or source container metadata. Remove audio unless it has been separately reviewed. Crop or cover private details before resizing and encoding; small text is not a privacy measure. Keep original captures and raw inventories outside this repository, record transformations privately, and preserve displayed readings. Stills are limited to 2,000 pixels and 800 KB, GIFs to 6 MB, and MP4 clips to 10 MB. Short excerpts keep the repository practical to clone.
+Re-export derivatives without EXIF, GPS, XMP, embedded thumbnails, comments, or source container metadata. Remove audio unless it has been separately reviewed. Cover credentials and unrelated personal information before resizing and encoding; small text is not a privacy measure. Review public management endpoints before publishing. Ordinary lab labels, private LAN addresses, and readings can remain visible. Keep original captures and raw inventories outside this repository and record transformations privately. Stills are limited to 2,000 pixels and 800 KB, GIFs to 20 MB, and MP4 clips to 25 MB. Short excerpts keep the repository practical to clone.
 
 ```sh
 gitleaks dir . --redact

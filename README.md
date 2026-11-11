@@ -10,7 +10,13 @@ A small rack, two GPU workstations, and a fairly persistent list of things to fi
 
 **[Network Orrery](projects/network-orrery.md).** The network as a planetary system: physical hosts are planets, their guests are moons, and live telemetry supplies the readings. The rack edition renders on a passed-through Intel Arc A310 and streams to a Raspberry Pi display. A separate WebGPU version runs on the 4090 workstation. The page includes recordings and the actual rendering path.
 
+[![Orbiting the black hole in the RTX 4090 workstation Orrery](images/kerr-closeup.gif)](projects/network-orrery.md)
+
+*The workstation renderer in motion. [More views and larger recordings](projects/network-orrery.md#the-workstation-version).*
+
 **[Desktop tools](projects/desktop-tools.md).** GPU and system telemetry, per-monitor HDR controls, a DDC/CI input switch, and a small dock that hides their windows without stopping the tools. The interesting problems are sample freshness, process ownership, and deciding when a hardware command has actually succeeded.
+
+**[Remote and mobile access](projects/mobile-access.md).** Tailscale connects my phone to the lab. A restricted NAS relay sends Wake-on-LAN packets, separate shortcuts open the workstation terminals, and the phone widget shows host readings. The screenshots include Claude Code using the 5090 workstation's shell from the phone.
 
 **[Talos and Kubernetes](projects/talos.md).** Three control-plane VMs run Talos 1.13.8 and Kubernetes 1.36.2. [Uptime Kuma](kubernetes/uptime-kuma/README.md) and AWX use local-path volumes. The notes and proposed Kuma manifest cover service checks, single-writer storage, and what happens when the VM holding the data is unavailable.
 

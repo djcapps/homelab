@@ -15,9 +15,6 @@ from PIL import Image, ImageSequence
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN = MarkdownIt("commonmark", {"html": True}).enable("table")
 IGNORED = {".git", ".venv", "__pycache__", ".pytest_cache", ".ruff_cache", "node_modules", "local"}
-PRIVATE_ADDRESS = re.compile(
-    r"\b(?:192\.168\.\d{1,3}\.\d{1,3}|10(?:\.\d{1,3}){3}|172\.(?:1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})\b"
-)
 FORBIDDEN = re.compile(
     r"cutting-edge|robust ecosystem|seamlessly integrated|comprehensive solution|leveraging technology|\bjourney\b",
     re.I,
@@ -55,13 +52,13 @@ def check() -> list[str]:
     for path in files:
         relative = path.relative_to(ROOT)
         if path.suffix.lower() == ".mp4":
-            if path.stat().st_size > 10_000_000:
+            if path.stat().st_size > 25_000_000:
                 errors.append(f"{relative}: video exceeds publication budget")
             # Stream decoding and moving-text review are separate publication checks.
             continue
         if path.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif"}:
             with Image.open(path) as im:
-                budget = 6_000_000 if path.suffix.lower() == ".gif" else 800_000
+                budget = 20_000_000 if path.suffix.lower() == ".gif" else 800_000
                 if max(im.size) > 2000 or path.stat().st_size > budget:
                     errors.append(f"{relative}: image exceeds publication budget")
                 for frame in ImageSequence.Iterator(im):
@@ -84,8 +81,6 @@ def check() -> list[str]:
         }:
             continue
         text = path.read_text(encoding="utf-8")
-        if PRIVATE_ADDRESS.search(text):
-            errors.append(f"{relative}: private IPv4 address found")
         if SECRET.search(text):
             errors.append(f"{relative}: credential-shaped content found")
         if path.suffix == ".md":

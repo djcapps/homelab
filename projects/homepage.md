@@ -41,4 +41,6 @@ Host tiles also launch native SSH sessions from the workstation. The browser is 
 
 </details>
 
+The [phone dashboard and remote-access shortcuts](mobile-access.md) use the same monitoring sources, with Tailscale access, workstation terminals, and a separate Wake-on-LAN relay.
+
 The main limitation is the shared dependency on the NAS and upstream collectors. Homepage is convenient, but it cannot be the only way to discover that its own host is unavailable. The [monitoring notes](monitoring.md) cover source freshness and unknown states; [Kuma](../kubernetes/uptime-kuma/README.md) provides a separate view of service checks.
