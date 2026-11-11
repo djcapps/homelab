@@ -4,6 +4,25 @@ The running deployment has one replica, a `Recreate` update strategy, and a 2 Gi
 
 `Recreate` makes the single-writer arrangement explicit during updates. It also means a deployment update interrupts the service. The volume is bound to one Talos VM, so another Ready node does not automatically provide another copy of Kuma's data.
 
+## What the checks tell me
+
+![Uptime Kuma DNS monitor with response history and recorded timeouts](../../images/kuma-dns.png)
+
+*DNS check captured November 10, 2026. The history includes real query timeouts and later recoveries. The percentages belong to this monitor and its displayed windows; they are not an availability claim for the lab.*
+
+The DNS monitor makes an A-record query. It checks a different path from a host ping, which can succeed while resolution fails. Its response-time graph gives me a place to start investigating, but a spike alone does not identify whether the delay was local, upstream, or in the monitoring path.
+
+The Jellyfin HTTP monitor records application reachability. Its history distinguishes connection refused from host unreachable, which narrows the first checks: listener and service state for the former, network path and guest state for the latter. Either message still needs investigation before assigning a cause. An HTTP success does not verify playback, transcoding, or access to every media file.
+
+<details>
+<summary>Jellyfin HTTP check and failure history</summary>
+
+![Uptime Kuma HTTP monitor with successful responses and prior connection errors](../../images/kuma-http.png)
+
+*The private endpoint is covered in both the header and error rows. Error types remain visible.*
+
+</details>
+
 ## The example
 
 [`kuma.yaml`](kuma.yaml) keeps the observed single-replica, Recreate, and 2 GiB storage design. It is a **proposed example, not the live manifest**. It has not been deployed.

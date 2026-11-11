@@ -4,6 +4,22 @@ Prometheus and Grafana run in a Proxmox container. They collect host, Windows, h
 
 The useful distinction is between a service failure and a monitoring failure. A collector that cannot authenticate, gets an empty response, or stops updating must not produce a reassuring green tile.
 
+![Grafana workstation dashboard with CPU, GPU, temperature, memory, and power history](../images/grafana-workstation.png)
+
+*The RTX 4090 workstation dashboard, November 10, 2026. This is an ordinary captured time window, not a controlled workload or a performance comparison.*
+
+## Following a reading
+
+The workstation dashboard combines Windows and hardware exporter data. CPU and GPU activity, temperature, power, memory, disk, and network history make it easier to ask what changed together. A temperature rise alongside sustained GPU use is useful context; it does not identify the application or establish the cause on its own.
+
+![Grafana summary gauges for the three Proxmox hosts and the NAS](../images/grafana-cluster.png)
+
+*Host summary from the cluster dashboard. The four monitored machines include the separate NAS; they are not four Proxmox nodes. Address labels are covered.*
+
+The [Homepage summary](homepage.md) and [Orrery](network-orrery.md) reuse these monitoring sources. Agreement between three displays is therefore not three independent health checks. When they disagree, I check the source, collection time, and aggregation window before treating one display as authoritative.
+
+For availability, [Kuma's DNS and HTTP checks](../kubernetes/uptime-kuma/README.md#what-the-checks-tell-me) provide a different view. A host can be reachable while DNS queries time out, and an HTTP endpoint can answer while a background job is broken. The check has to match the failure I want to detect.
+
 ## A small collector with a real failure case
 
 The existing Kuma-to-dashboard collector reads Kuma's authenticated Prometheus endpoint and writes a compact JSON feed. An earlier shell implementation could interpret an error response as zero monitors and report `0/0 up`. The current Python collector checks the HTTP status and requires actual monitor samples. Pending checks are separate from healthy checks.

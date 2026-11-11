@@ -16,6 +16,20 @@ The existing launch profile uses one parallel slot and a 56:44 split in the veri
 
 The RPC transport is experimental and is not authenticated or encrypted. Its intended deployment is a narrowly restricted trusted connection. A firewall restriction is still not transport authentication. The public examples do not open ports, change routes, start workers, or download model weights.
 
+## The control window
+
+<p align="center">
+  <img src="../images/ai-control.png" width="353" alt="AI Control with the two-GPU llama.cpp profile and ComfyUI both stopped">
+</p>
+
+*AI Control on November 10, 2026. Both projects are off. The profile label describes the selected configuration, not an active inference session.*
+
+The React/TypeScript/Electron control window keeps model startup explicit. Opening it, or restoring it through [Widget Dock](desktop-tools.md#widget-dock-and-ai-control), does not allocate the GPUs. Closing the window also does not implicitly stop a running model.
+
+The main process accepts a fixed set of project actions through restricted IPC. Before stopping a process, it checks that the process belongs to the configured project. Switching workloads includes releasing the previous allocation; a failed or unconfirmed remote shutdown must remain visible instead of reporting that both GPUs are free. The existing route guard is part of this launch path, which is why the configuration drift below matters.
+
+The [SysWidget readings](desktop-tools.md#syswidget) help distinguish low GPU utilization from available VRAM. The [Grafana history](monitoring.md#following-a-reading) provides a longer view of load, temperature, and power.
+
 ## What has been tested
 
 The existing November 1 and 2, 2026 validation files contain actual inference responses from a Qwen3-Next-80B-A3B-Instruct derivative in Q4_K_M format. The build is pinned to llama.cpp commit `785322d17f2d51e5185cf996a1f4e46d87640841`. Device logs show 49 of 49 transformer layers offloaded across the two GPUs, with a small CPU-mapped token-embedding buffer remaining.

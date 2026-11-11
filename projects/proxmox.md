@@ -10,6 +10,12 @@ Small machines make this practical to keep at home, but memory, PCIe slots, and 
 
 *November 10, 2026. Original photograph, cropped with private screen headings, address labels, and disk identifiers redacted.*
 
+![Proxmox guest inventory with running containers and stopped experiments](../images/proxmox-guests.png)
+
+*The three-host tree and one host's guest list. Names tied to the private network are redacted; guest states and resource readings are unchanged.*
+
+Containers handle services such as monitoring, DNS, Immich, and Jellyfin. VMs provide separate operating-system boundaries for Talos, Home Assistant, network experiments, and the [Orrery renderer](network-orrery.md). The captured list includes stopped desktop and CML guests alongside running services. Keeping the distinction visible helps separate expected shutdowns from outages.
+
 ## What HA covers
 
 Proxmox HA manages the three Talos VMs, the monitoring container, and the DNS container. Ten asynchronous ZFS replication jobs provide copies on the other hosts. Their configured interval is one minute. The observed jobs had no recorded failures, with some in progress at the time of inspection.

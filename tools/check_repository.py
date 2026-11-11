@@ -10,7 +10,7 @@ from urllib.parse import unquote, urlsplit
 
 import yaml
 from markdown_it import MarkdownIt
-from PIL import Image
+from PIL import Image, ImageSequence
 
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN = MarkdownIt("commonmark", {"html": True}).enable("table")
@@ -54,15 +54,23 @@ def check() -> list[str]:
     ]
     for path in files:
         relative = path.relative_to(ROOT)
-        if path.suffix.lower() in {".jpg", ".jpeg", ".png"}:
+        if path.suffix.lower() == ".mp4":
+            if path.stat().st_size > 10_000_000:
+                errors.append(f"{relative}: video exceeds publication budget")
+            # Stream decoding and moving-text review are separate publication checks.
+            continue
+        if path.suffix.lower() in {".jpg", ".jpeg", ".png", ".gif"}:
             with Image.open(path) as im:
-                if im.getexif() or any(
-                    k in im.info for k in ("exif", "xmp", "XML:com.adobe.xmp", "comment")
-                ):
-                    errors.append(f"{relative}: source metadata remains")
-                if max(im.size) > 2000 or path.stat().st_size > 800_000:
+                budget = 6_000_000 if path.suffix.lower() == ".gif" else 800_000
+                if max(im.size) > 2000 or path.stat().st_size > budget:
                     errors.append(f"{relative}: image exceeds publication budget")
-                im.verify()
+                for frame in ImageSequence.Iterator(im):
+                    frame.load()
+                    if frame.getexif() or any(
+                        k in frame.info for k in ("exif", "xmp", "XML:com.adobe.xmp", "comment")
+                    ):
+                        errors.append(f"{relative}: source metadata remains")
+                        break
             continue
         if path.suffix.lower() not in {
             ".md",

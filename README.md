@@ -6,6 +6,20 @@ A small rack, two GPU workstations, and a fairly persistent list of things to fi
 
 *The lab on November 10, 2026. This photo has light AI-assisted retouching and privacy redactions; [photo notes](images/README.md) describe the edits. The [rack close-up](projects/proxmox.md) uses an original photograph.*
 
+## Projects
+
+**[Network Orrery](projects/network-orrery.md).** The network as a planetary system: physical hosts are planets, their guests are moons, and live telemetry supplies the readings. The rack edition renders on a passed-through Intel Arc A310 and streams to a Raspberry Pi display. A separate WebGPU version runs on the 4090 workstation. The page includes recordings and the actual rendering path.
+
+**[Desktop tools](projects/desktop-tools.md).** GPU and system telemetry, per-monitor HDR controls, a DDC/CI input switch, and a small dock that hides their windows without stopping the tools. The interesting problems are sample freshness, process ownership, and deciding when a hardware command has actually succeeded.
+
+**[Talos and Kubernetes](projects/talos.md).** Three control-plane VMs run Talos 1.13.8 and Kubernetes 1.36.2. [Uptime Kuma](kubernetes/uptime-kuma/README.md) and AWX use local-path volumes. The notes and proposed Kuma manifest cover service checks, single-writer storage, and what happens when the VM holding the data is unavailable.
+
+**[Proxmox and recovery](projects/proxmox.md).** Five guests use Proxmox HA with asynchronous ZFS replication. Backups are a separate concern. The recovery checklist follows a guest through storage and application checks, supported by an offline [backup freshness checker](automation/README.md#backup-freshness).
+
+**[Local GPU inference](projects/gpu-inference.md).** Native Windows llama.cpp uses CUDA locally and an RPC worker on the other workstation. Saved tests show inference with an 80B model across both GPUs. The services start manually; the current review found stale network assumptions that need fixing before the next run.
+
+**[Homepage and services](projects/homepage.md).** The dashboard is my front door to the lab, with host readings, backup status, SSH launchers, and service controls. [Monitoring notes](projects/monitoring.md) follow the data through Prometheus, Grafana, and Kuma, including a collector bug that made an empty response look healthy.
+
 ## The lab
 
 Three Lenovo Tiny systems run Proxmox. A fourth runs Fedora for file storage, backups, and administration. The GPU workstations handle inference separately from the services in the rack. This inventory was checked on November 10, 2026.
@@ -33,6 +47,8 @@ flowchart TB
     pve --> services[Monitoring, DNS, Immich and other guests]
     talos --> apps[Uptime Kuma and AWX]
     apps --> local[Local volumes on one Talos VM]
+    pve --> orrery[Orrery VM with Intel Arc A310]
+    orrery -->|Video stream| display[Raspberry Pi rack display]
     services -->|Immich originals| nas
     pve -->|Guest backups| nas
     gpu --> inference[Manual llama.cpp CUDA and RPC workloads]
@@ -40,18 +56,8 @@ flowchart TB
 
 This is a logical dependency diagram, not a cable or VLAN map. The Talos VMs also run application workloads. Their local volumes and the NAS remain important failure points; three control-plane nodes do not make every application highly available.
 
-## Projects
-
-**[Talos and Kubernetes](projects/talos.md).** Three control-plane VMs run Talos 1.13.8 and Kubernetes 1.36.2. The notes cover Flannel, local-path storage, AWX, and what happens when the VM holding an application's data is unavailable.
-
-**[Uptime Kuma](kubernetes/uptime-kuma/README.md).** A single-replica deployment monitors services, while a separate collector reports its status to the home dashboard. The example manifest and [monitoring notes](projects/monitoring.md) explain why an empty or stale response must not look healthy.
-
-**[Proxmox and recovery](projects/proxmox.md).** Five guests are managed by Proxmox HA with asynchronous ZFS replication. Backups are a separate concern. The runbook follows a guest from host failure through storage checks and application verification, with a [backup freshness checker](automation/README.md#backup-freshness).
-
-**[Local GPU inference](projects/gpu-inference.md).** Native Windows llama.cpp uses CUDA locally and an RPC worker on the other workstation. Saved tests show actual inference with an 80B model across both GPUs. The services start manually. The current review found an address mismatch in the launch configuration, which needs revalidation before the next run.
-
 ## What I'm working on
 
 The next useful work is fairly practical: test a full restore of Kuma and the photo library, add resource metrics and probes to Kubernetes, and validate the inference launcher's network assumptions after address changes. A GitOps rollout can follow once storage and recovery behavior are documented. These are proposed improvements, not completed deployments.
 
-The [automation directory](automation/README.md) contains offline checks and examples. [Validation instructions](CONTRIBUTING.md) cover the code, manifests, links, and publication checks. Examples use substitute identifiers; credentials and the private network map stay outside this repository.
+The [automation directory](automation/README.md) contains offline checks and examples. [Validation instructions](CONTRIBUTING.md) cover code, manifests, links, and publication checks. [Media notes](images/README.md) describe the photographs, screenshots, and short recordings. Credentials and the private network map stay outside this repository.
