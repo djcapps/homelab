@@ -40,16 +40,6 @@ A small local coding test initially exhausted an 8,192-token working context thr
 
 I am leaving throughput figures out of this overview. The saved measurements are short runs with specific inputs, and a cached model reload was slower than the first load. The reason for that loading behavior remains unresolved.
 
-## Current state and a useful catch
 
-Both GPUs were verified with `nvidia-smi` on November 10. The distributed inference services were stopped at inspection and were not started for this review. The existing launcher configuration still contains an older coordinator address than the live Ethernet interface. Its route guard checks that address before starting the model.
-
-The read-only route check also selected the Tailscale interface for the worker instead of the intended Ethernet interface. A physically connected cable is not enough to establish which path Windows will use. Checking `Find-NetRoute` for the actual destination reveals both the chosen interface and source address before a long model load makes the failure harder to interpret.
-
-This needs a configuration and source-restriction review before the next launch. The current worker firewall rule could not be read at the available privilege, so its present scope is not claimed as verified. No route or firewall rule was changed.
-
-The [inference preflight checker](../automation/README.md#inference-preflight) turns this into a repeatable offline check: compare the intended coordinator, selected route source, GPU order, free-memory budgets, and model file size before allocating GPU memory. It detected the address mismatch using the live inventory and existing configuration. It does not test RPC reachability or prove that inference will succeed.
-
-After correcting the configuration through the normal maintenance process, the next tests should cover a fresh start, model identity, a short inference request, and clean shutdown. Longer context occupancy, a sustained run, and recovery after a network interruption remain separate tests.
 
 References: [llama.cpp RPC](https://github.com/ggml-org/llama.cpp/tree/master/tools/rpc) and [multi-GPU documentation](https://github.com/ggml-org/llama.cpp/blob/master/docs/multi-gpu.md). Model files and publisher licenses remain outside this repository.
