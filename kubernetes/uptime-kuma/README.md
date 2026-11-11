@@ -10,7 +10,9 @@ The running deployment has one replica, a `Recreate` update strategy, and a 2 Gi
 
 *DNS check captured November 10, 2026. The history includes real query timeouts and later recoveries. The percentages belong to this monitor and its displayed windows; they are not an availability claim for the lab.*
 
-The DNS monitor makes an A-record query. It checks a different path from a host ping, which can succeed while resolution fails. Its response-time graph gives me a place to start investigating, but a spike alone does not identify whether the delay was local, upstream, or in the monitoring path.
+The DNS monitor asks the local AdGuard Home server for the A records of `google.com` every 60 seconds. Google is the test hostname shown in the screenshot; the configured resolver is AdGuard, not Google Public DNS. The live monitor settings were checked on November 10, 2026.
+
+This checks whether AdGuard can answer a public-name lookup, using its cache or upstream resolution. It does not test ad blocking or prove that every client uses AdGuard. It also checks a different path from a host ping, which can succeed while resolution fails. The response-time graph gives me a place to start investigating, but a spike alone does not identify whether the delay was local, upstream, or in the monitoring path.
 
 The Jellyfin HTTP monitor records application reachability. Its history distinguishes connection refused from host unreachable, which narrows the first checks: listener and service state for the former, network path and guest state for the latter. Either message still needs investigation before assigning a cause. An HTTP success does not verify playback, transcoding, or access to every media file.
 
